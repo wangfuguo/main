@@ -1,8 +1,157 @@
 <!DOCTYPE html>
 <html>
-<body>
-<h1>Hello World</h1>
-<p>I'm hosted with GitHub Pages.</p>
-<p>by wangfuguo</p>
-</body>
+	<head>
+		<meta charset="utf-8">
+		<title>利息计算器</title>
+		<style type="text/css">
+			.form-control{
+				height: 20px;
+			    padding: 3px 8px;
+			    font-size: 14px;
+			    line-height: 1.42857143;
+			    color: #555;
+			    background-color: #fff;
+			    background-image: none;
+			    border: 1px solid #732626;
+			}
+			.table-bordered {
+			    border: 1px solid green;
+			}
+			.table {
+			    width: 20%;
+			    max-width:55%;
+			    margin-bottom: 20px;
+			}
+			table {
+			    /*border-spacing: 0;*/
+			    border-collapse: collapse;
+			    background-color: greenyellow;
+			}
+			td {
+    			border: 1px solid green;
+    		}
+    		th {
+    			border: 1px solid green;
+    			width: 20.5%;
+    		}
+    		.btn-primary:hover {
+			    color: #fff;
+			    border: none;
+			}
+			.btn-primary:hover, .btn-primary:focus, .btn-primary.focus, .btn-primary:active, .btn-primary.active, .open > .dropdown-toggle.btn-primary {
+			    color: #fff;
+			    background-color: #286090;
+			    border-color: #204d74;
+			}
+			.btn:hover, .btn:focus, .btn.focus {
+			    color: #333;
+			    text-decoration: none;
+			}
+			.btn-primary {
+			    color: #fff;
+			    border: none;
+			    border-radius: 0;
+			}
+			.btn {
+			    font-family: 'aileronthin'arial!important;
+			    letter-spacing: .6px;
+			    font-size: 16px;
+			    -webkit-font-smoothing: subpixel-antialiased;
+			    -webkit-transition: border .25s linear,color .25s linear,background-color .25s linear;
+			    transition: border .25s linear,color .25s linear,background-color .25s linear;
+			}
+			.btn-block {
+			    display: block;
+			    width: 100%;
+			}
+			.btn-lg, .btn-group-lg > .btn {
+			    padding: 3px 8px;
+			    font-size: 18px;
+			    line-height: 1.3333333;
+			    border-radius: 6px;
+			}
+			.btn-primary {
+			    color: #fff;
+			    background-color: #337ab7;
+			    border-color: #2e6da4;
+			}
+			.btn {
+			    display: inline-block;
+			    padding: 3px 8px;
+			    margin-bottom: 0;
+			    font-weight: normal;
+			    line-height: 1.42857143;
+			    text-align: center;
+			    white-space: nowrap;
+			    vertical-align: middle;
+			    -ms-touch-action: manipulation;
+			    touch-action: manipulation;
+			    cursor: pointer;
+			    -webkit-user-select: none;
+			    -moz-user-select: none;
+			    -ms-user-select: none;
+			    user-select: none;
+			    background-image: none;
+			    /*border: 1px solid transparent;*/
+			    border-radius: 4px;
+			}
+			#resultData {
+				font-family: Microsoft YaHei;
+			}
+		</style>
+	</head>
+	<body>
+		<div align="center">
+			<h2>利息计算器</h2>
+		</div>
+		<div>
+			<div align="center">
+				<table class="table table-bordered">
+					<tr><td>本金:</td><td><input type="text" class="form-control" id="amount">元</td></tr>
+					<tr><td>利率:</td><td><input type="text" class="form-control" id="rate">%</td></tr>
+					<tr><td>时间:</td><td><input type="text" class="form-control" id="yeartime">年</td></tr>
+					<tr><td colspan="2" align="center"><button class="btn btn-block btn-lg btn-primary" onclick="jisuan()">计算</button></td></tr>
+				</table>
+			</div>
+			<div align="center">
+				<br/>
+				<h3>计算结果</h3>
+				<table>
+					<thead><th>本金(元)</th><th>利率(%)</th><th>时间(年)</th><th>一次投入总收益(元)</th><th>每年增量总收益(元)</th></thead>
+					<tbody id="resultData">
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</body>
+	<script>
+		function jisuan(){
+			var amount = document.getElementById("amount").value;
+			var rate = document.getElementById("rate").value;
+			var yeartime = document.getElementById("yeartime").value;
+			if(!isNaN(amount) && !isNaN(rate) && !isNaN(yeartime)){
+				var onceSumAmount = 0;
+				var everyYearSumAmount = 0;
+				onceSumAmount = amount*Math.pow((1+rate/100), yeartime);
+				for(var i = 1; i <= yeartime; i++){
+					everyYearSumAmount += amount*Math.pow((1+rate/100), i);
+				}
+				var tbodyHtml = '<td>'+segment(amount, null)+'</td><td>'+rate+'</td><td>'+yeartime+'</td><td>'+segment(parseInt(onceSumAmount), null)+'</td><td>'+segment(parseInt(everyYearSumAmount), null)+'</td>';
+				var childNode=document.createElement("tr");
+				childNode.innerHTML = tbodyHtml;
+				var parent=document.getElementById("resultData");
+				parent.appendChild(childNode);
+			} else {
+				alert("输入有误，请重新输入!");
+			}
+		}
+
+		function segment(s,seg){
+			var seg = seg || ",";
+			if(typeof s === "number"){
+				s += "";
+			}
+			return s.replace(/(?=(?!\b)(\d{3})+$)/g,seg);
+    	}
+	</script>
 </html>
